@@ -7,4 +7,7 @@ transcript_filepath = 'data/transcript.json'
 portfolio_outputpath = 'data/portfolio.csv'
 profile_outputpath = 'data/profile.csv'
 transcript_outputpath = 'data/transcript.csv'
-final_filepath = 'data/starsbucks_data.csv'
+final_filepath = 'data/starsbucks_data_eda.csv'
+data_modelpath = 'data/starsbucks_data_model.csv'
+
+label = 'event'
