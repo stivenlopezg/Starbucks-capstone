@@ -2,10 +2,9 @@ import sys
 import logging
 import numpy as np
 import pandas as pd
-from classification_model.config import values_reward, portfolio_filepath, profile_filepath,\
-                                        transcript_filepath, portfolio_outputpath, profile_outputpath,\
-                                        transcript_outputpath, final_filepath
-
+from classification_model.config import values_reward, portfolio_filepath, profile_filepath, \
+    transcript_filepath, portfolio_outputpath, profile_outputpath, \
+    transcript_outputpath, final_filepath, data_modelpath
 
 logger = logging.getLogger('clean_starbucks_data')
 logger.setLevel(logging.INFO)
@@ -96,6 +95,18 @@ def clean_final_dataframe(dataframe: pd.DataFrame) -> pd.DataFrame:
     return dataframe
 
 
+def clean_data_for_model(dataframe: pd.DataFrame):
+    """
+
+    :param dataframe:
+    :return:
+    """
+    dataframe = dataframe[dataframe['event'].isin(['offer viewed', 'offer completed'])]
+    indices = dataframe[dataframe['gender'].isna()].index.tolist()
+    dataframe.drop(indices, axis=0, inplace=True)
+    return dataframe
+
+
 def merge_dataframes(left_dataframe: pd.DataFrame, right_dataframe: pd.DataFrame, on: str) -> pd.DataFrame:
     """
     
@@ -122,17 +133,19 @@ def export_data(dataframe: pd.DataFrame, file_path: str):
 def main():
     portfolio = load_data(file_path=portfolio_filepath)
     portfolio = clean_portfolio_file(dataframe=portfolio)
+    export_data(dataframe=portfolio, file_path=portfolio_outputpath)
     profile = load_data(file_path=profile_filepath)
     profile = clean_profile_file(dataframe=profile)
+    export_data(dataframe=profile, file_path=profile_outputpath)
     transcript = load_data(file_path=transcript_filepath)
     transcript = clean_transcript_file(dataframe=transcript)
+    export_data(dataframe=transcript, file_path=transcript_outputpath)
     final_dataframe = merge_dataframes(left_dataframe=transcript, right_dataframe=profile, on='person_id')
     final_dataframe = merge_dataframes(left_dataframe=final_dataframe, right_dataframe=portfolio, on='offer_id')
     final_dataframe = clean_final_dataframe(dataframe=final_dataframe)
-    export_data(dataframe=portfolio, file_path=portfolio_outputpath)
-    export_data(dataframe=profile, file_path=profile_outputpath)
-    export_data(dataframe=transcript, file_path=transcript_outputpath)
     export_data(dataframe=final_dataframe, file_path=final_filepath)
+    model_dataframe = clean_data_for_model(dataframe=final_dataframe)
+    export_data(dataframe=model_dataframe, file_path=data_modelpath)
 
 
 if __name__ == '__main__':
