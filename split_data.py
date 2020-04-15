@@ -25,7 +25,7 @@ def load_data(file_path: str) -> pd.DataFrame:
 
 
 def transform_label(dataframe: pd.DataFrame, target: str) -> pd.DataFrame:
-    dataframe[target].apply(lambda x: 1 if x == 'offer completed' else 0)
+    dataframe[target] = dataframe[target].apply(lambda x: 1 if x == 'offer completed' else 0)
     logger.info('Se ha transformado la variable dependiente correctamente!')
     return dataframe
 
