@@ -3,8 +3,8 @@ import logging
 import numpy as np
 import pandas as pd
 from classification_model.config import values_reward, portfolio_filepath, profile_filepath, \
-    transcript_filepath, portfolio_outputpath, profile_outputpath, \
-    transcript_outputpath, final_filepath, data_modelpath
+                                        transcript_filepath, portfolio_outputpath, profile_outputpath, \
+                                        transcript_outputpath, final_filepath, data_modelpath
 
 logger = logging.getLogger('clean_starbucks_data')
 logger.setLevel(logging.INFO)
@@ -115,7 +115,7 @@ def merge_dataframes(left_dataframe: pd.DataFrame, right_dataframe: pd.DataFrame
     :param right_dataframe: 
     :return: 
     """
-    dataframe = pd.merge(left=left_dataframe, right=right_dataframe, how='left', on=on)
+    dataframe = pd.merge(left=left_dataframe, right=right_dataframe, how='left', on=[on])
     logger.info('Se han unido ambos set de datos exitosamente!')
     return dataframe
 
