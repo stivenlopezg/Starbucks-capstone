@@ -5,6 +5,12 @@ import plotly.graph_objs as go
 py.init_notebook_mode()
 
 
+def style_dataframe(df: pd.DataFrame, style):
+    df = df.style.set_table_styles(style) \
+                 .background_gradient(cmap='Blues')
+    return df
+
+
 def barplot(df: pd.DataFrame, col: str, title: str, xlabel: str, ylabel: str):
     bar_values = df[col].value_counts().sort_values(ascending=True)
     x = bar_values.values.tolist()
